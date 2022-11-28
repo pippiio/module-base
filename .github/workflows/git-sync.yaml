@@ -17,8 +17,7 @@ jobs:
     steps:
       - id: matrix
         run: |
-          echo ${{secrets.MODULE_REPOS}} | sed 's/./& /g'
-          echo "matrix=$module_repos" >> $GITHUB_OUTPUT
+          echo "matrix=[\"a\", \"b\", \"c\"]" >> $GITHUB_OUTPUT
 
   sync:
     name: Sync Base Template Changes
