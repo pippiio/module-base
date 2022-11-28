@@ -1,0 +1,32 @@
+---
+name: Sync Base Template Changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup:
+    name: Setup Sync Repos
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    env:
+      module_repos: ${{ secrets.MODULE_REPOS }}
+    steps:
+      - id: matrix
+        run: |
+          echo ${{secrets.MODULE_REPOS}} | sed 's/./& /g'
+          echo "matrix=$module_repos" >> $GITHUB_OUTPUT
+
+  sync:
+    name: Sync Base Template Changes
+    needs: [setup]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        value: ${{ fromJson(needs.setup.outputs.matrix) }}
+    steps:
+      - run: |
+          echo "${{ matrix.value }}"
